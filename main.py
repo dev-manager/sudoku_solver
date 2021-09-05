@@ -73,7 +73,6 @@ def solving():
             valid = True
         else:
             pass
-       
     file_name = board.replace('  ', '')[:9]
     with open("E:/PRAC/test_cases/unsolved_board/unsolved_board_" + file_name + ".board", 'w') as f:
         f.write(board)
