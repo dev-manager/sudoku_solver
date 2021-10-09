@@ -1,6 +1,9 @@
 from map_maker import maker
 import time
 import sys
+import os
+
+call_count = 0
 
 
 def Block(sudoku, m, n):
@@ -31,22 +34,33 @@ def isValid(sudoku, m, n, v):
 def solver(su, Z=0, start: float = 0.0):
     global solved
     global file_name
+    global call_count 
     solved = ''
     sudoku = su[:]
-    
+    AZ = 0
+    for i in sudoku:
+        AZ += i.count(0)
+    bo = ""
+    for i in sudoku:
+        bo += '  '.join(map(str, i)) + "\n"
+
+    os.system("cls")
+    print(f"Function's call count: {call_count}\nSolved tile count: {Z}\nBoard's zero count: {AZ}\n{' ' * 6}====Board====\n{bo}" + "\n")
+    call_count += 1
     m = Z // len(sudoku)
     n = Z % len(sudoku)
     
     if Z == len(sudoku) ** 2:
+        os.system("cls")
         for i in sudoku:
             print('  '.join(map(str, i)))
             solved += '  '.join(map(str, i)) + '\n'
         file_name = board.replace('  ', '')[:9]
-        with open("E:/PRAC/test_cases/solved_board/solved_board_" + file_name + ".board", 'w') as f:
+        with open("test_cases/solved_board/solved_board_" + file_name + ".board", 'w') as f:
             f.write(solved)
         times = round(time.time() - start, 3)
         print(f"solving took {times}sec")
-        with open("E:/PRAC/test_cases/times/solving_time_" + file_name + ".board", 'w') as f:
+        with open("test_cases/times/solving_time_" + file_name + ".board", 'w') as f:
             f.write(f"solving took {times}sec")
         sys.exit(Z)
     
@@ -74,7 +88,7 @@ def solving():
         else:
             pass
     file_name = board.replace('  ', '')[:9]
-    with open("E:/PRAC/test_cases/unsolved_board/unsolved_board_" + file_name + ".board", 'w') as f:
+    with open("test_cases/unsolved_board/unsolved_board_" + file_name + ".board", 'w') as f:
         f.write(board)
     print(f"file_name:{file_name}")
     print("board:")
