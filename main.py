@@ -34,7 +34,9 @@ def isValid(sudoku, m, n, v):
 def solver(su, Z=0, start: float = 0.0):
     global solved
     global file_name
-    global call_count 
+    global call_count
+
+    global boa
     solved = ''
     sudoku = su[:]
     AZ = 0
@@ -45,7 +47,8 @@ def solver(su, Z=0, start: float = 0.0):
         bo += '  '.join(map(str, i)) + "\n"
 
     os.system("cls")
-    print(f"Function's call count: {call_count}\nSolved tile count: {Z}\nBoard's zero count: {AZ}\n{' ' * 6}====Board====\n{bo}" + "\n")
+    time.sleep(0.0000001)
+    print(f"File name: {file_name}\nFunction's call count: {call_count}\nSolved tile count: {81 - AZ}\nBoard's zero count: {AZ}\n{' ' * 5}====Board====\n{bo}\n{' ' * 5}====board====\n{boa}")
     call_count += 1
     m = Z // len(sudoku)
     n = Z % len(sudoku)
@@ -76,6 +79,7 @@ def solver(su, Z=0, start: float = 0.0):
 
 def solving():
     global board
+    global boa
     global file_name
     valid = False
     board = ''
@@ -83,6 +87,7 @@ def solving():
         board = maker()
         try:
             board.replace("  ", "").index("000000000")
+            boa = board
         except ValueError:
             valid = True
         else:
