@@ -46,8 +46,20 @@ def solver(su, Z=0, start: float = 1.0):
         bo += '  '.join(map(str, i)) + "\n"
 
     os.system("cls")
-    time.sleep(0.01)
-    print(f"File name: {file_name}\nTime spend: {round(time.time() - start, 3)}\nZ count(numbers that solved with function, If it is 81, the board is solved.): {Z}\nFunction's call count: {call_count}\nCall count / spend time ratio: {call_count / (time.time() - start)}\nSolved tile count: {81 - AZ}\nBoard's zero count: {AZ}\n{' ' * 6}====Board====\n{bo}\n{' ' * 6}====board====\n{boa}")
+    sleep_time = 1
+    star = time.time()
+    print(f"①: File name: {file_name}")
+    print(f"②: Z count(numbers that solved with function, If it is 81, the board is solved.): {Z}")
+    print(f"③: Function's call count: {call_count}")
+    print(f"④: Time spend: {round(star - start, 3)}")
+    print("The higher the value of 5, the higher the efficiency.")
+    print(f"⑤: Call count / spend time ratio: {call_count / (star - start)}")
+    print(f"⑦: Solved tile count: {81 - AZ}")
+    print(f"⑧: Board's zero count: {AZ}")
+    print("==========Board==========")
+    print(bo[:-1])
+    print("==========board==========")
+    print(boa)
     call_count += 1
     m = Z // len(sudoku)
     n = Z % len(sudoku)
@@ -55,13 +67,24 @@ def solver(su, Z=0, start: float = 1.0):
     if Z == len(sudoku) ** 2:
         os.system("cls")
         for i in sudoku:
-            print('  '.join(map(str, i)))
             solved += '  '.join(map(str, i)) + '\n'
         file_name = board.replace('  ', '')[:9]
         with open("test_cases/solved_board/solved_board_" + file_name + ".board", 'w') as f:
             f.write(solved)
         times = round(time.time() - start, 3)
-        print(f"solving took {times}sec")
+        star = time.time()
+        print(f"①: File name: {file_name}")
+        print(f"②: Z count(numbers that solved with function, If it is 81, the board is solved.): {Z}")
+        print(f"③: Function's call count: {call_count}")
+        print(f"④: Time spend: {round(star - start, 3)}")
+        print("The higher the value of 5, the higher the efficiency.")
+        print(f"⑤: Call count / spend time ratio: {call_count / (star - start)}")
+        print(f"⑦: Solved tile count: {81 - AZ}")
+        print(f"⑧: Board's zero count: {AZ}")
+        print("==========Board==========")
+        print(bo[:-1])
+        print("==========board==========")
+        print(boa)
         with open("test_cases/times/solving_time_" + file_name + ".board", 'w') as f:
             f.write(f"solving took {times}sec")
         sys.exit(Z)
@@ -83,12 +106,13 @@ def solving():
     valid = False
     board = ''
     boa = ''
+    os.system("cls")
     while not valid:
         board = maker()
         try:
             board.replace("  ", "").index("000000000")
-            boa = board
         except ValueError:
+            boa = board
             valid = True
         else:
             pass
@@ -102,6 +126,7 @@ def solving():
     board = board.replace("  ", '')
     print("solved:")
     sudoku = list(map(lambda x: list(map(int, list(x))), board.split("\n")))
+    os.system("cls")
     solver(sudoku, start=time.time())
 
 
