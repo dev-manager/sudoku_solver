@@ -130,4 +130,5 @@ def solving():
     solver(sudoku, start=time.time())
 
 
-solving()
+if __name__ == "__main__":
+    solving()
