@@ -3,7 +3,7 @@ import time
 import sys
 import os
 
-call_count = 0
+call_count = 1
 
 
 def Block(sudoku, m, n):
@@ -31,11 +31,10 @@ def isValid(sudoku, m, n, v):
     return True
 
 
-def solver(su, Z=0, start: float = 0.0):
+def solver(su, Z=0, start: float = 1.0):
     global solved
     global file_name
     global call_count
-
     global boa
     solved = ''
     sudoku = su[:]
@@ -47,8 +46,8 @@ def solver(su, Z=0, start: float = 0.0):
         bo += '  '.join(map(str, i)) + "\n"
 
     os.system("cls")
-    time.sleep(0.0000001)
-    print(f"File name: {file_name}\nFunction's call count: {call_count}\nSolved tile count: {81 - AZ}\nBoard's zero count: {AZ}\n{' ' * 5}====Board====\n{bo}\n{' ' * 5}====board====\n{boa}")
+    time.sleep(0.01)
+    print(f"File name: {file_name}\nTime spend: {round(time.time() - start, 3)}\nZ count(numbers that solved with function, If it is 81, the board is solved.): {Z}\nFunction's call count: {call_count}\nCall count / spend time ratio: {call_count / (time.time() - start)}\nSolved tile count: {81 - AZ}\nBoard's zero count: {AZ}\n{' ' * 6}====Board====\n{bo}\n{' ' * 6}====board====\n{boa}")
     call_count += 1
     m = Z // len(sudoku)
     n = Z % len(sudoku)
@@ -83,6 +82,7 @@ def solving():
     global file_name
     valid = False
     board = ''
+    boa = ''
     while not valid:
         board = maker()
         try:
