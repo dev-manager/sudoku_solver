@@ -2,8 +2,11 @@ from map_maker import maker
 import time
 import sys
 import os
+from matplotlib import pyplot as plt
 
 call_count = 1
+debug = False
+values = []
 
 
 def Block(sudoku, m, n):
@@ -31,35 +34,43 @@ def isValid(sudoku, m, n, v):
     return True
 
 
-def solver(su, Z=0, start: float = 1.0):
+def solver(su, Z=0, start: float = 1.0, debug=False):
+    global values
     global solved
     global file_name
     global call_count
     global boa
+    AZ, bo = [0, ""]
     solved = ''
     sudoku = su[:]
-    AZ = 0
-    for i in sudoku:
-        AZ += i.count(0)
-    bo = ""
-    for i in sudoku:
-        bo += '  '.join(map(str, i)) + "\n"
-
-    os.system("cls")
-    sleep_time = 1
     star = time.time()
-    print(f"①: File name: {file_name}")
-    print(f"②: Z count(numbers that solved with function, If it is 81, the board is solved.): {Z}")
-    print(f"③: Function's call count: {call_count}")
-    print(f"④: Time spend: {round(star - start, 3)}")
-    print("The higher the value of 5, the higher the efficiency.")
-    print(f"⑤: Call count / spend time ratio: {call_count / (star - start)}")
-    print(f"⑦: Solved tile count: {81 - AZ}")
-    print(f"⑧: Board's zero count: {AZ}")
-    print("==========Board==========")
-    print(bo[:-1])
-    print("==========board==========")
-    print(boa)
+    try:
+        values.append(call_count / (star - start))
+    except ZeroDivisionError:
+        values.append(0)
+    if debug:
+        os.system("cls")
+        AZ = 0
+        for i in sudoku:
+            AZ += i.count(0)
+        bo = ""
+        for i in sudoku:
+            bo += '  '.join(map(str, i)) + "\n"
+        print(f"①: File name: {file_name}")
+        print(f"②: Z count(numbers that solved with function, If it is 81, the board is solved.): {Z}")
+        print(f"③: Function's call count: {call_count}")
+        print(f"④: Time spend: {round(star - start, 3)}")
+        print("The higher the value of 5, the higher the efficiency.")
+        try:
+            print(f"⑤: Call count / spend time ratio: {call_count / (star - start)}")
+        except ZeroDivisionError:
+            print(f"⑤: Call count / spend time ratio: {0}")
+        print(f"⑦: Solved tile count: {81 - AZ}")
+        print(f"⑧: Board's zero count: {AZ}")
+        print("==========Board==========")
+        print(bo[:-1])
+        print("==========board==========")
+        print(boa)
     call_count += 1
     m = Z // len(sudoku)
     n = Z % len(sudoku)
@@ -85,24 +96,25 @@ def solver(su, Z=0, start: float = 1.0):
         print(bo[:-1])
         print("==========board==========")
         print(boa)
+        x = [x for x in range(call_count - 1)]
+        plt.plot(x, values, 'b')
+        plt.show()
+
         with open("test_cases/times/solving_time_" + file_name + ".board", 'w') as f:
             f.write(f"solving took {times}sec")
         sys.exit(Z)
     
     if sudoku[m][n]:
-        solver(sudoku, Z + 1, start=start)
+        solver(sudoku, Z + 1, start, debug)
     else:
         for i in range(1, len(sudoku) + 1):
             if isValid(sudoku, m, n, i):
                 sudoku[m][n] = i
-                solver(sudoku, Z + 1, start=start)
+                solver(sudoku, Z + 1, start, debug)
                 sudoku[m][n] = 0
 
 
-def solving():
-    global board
-    global boa
-    global file_name
+if __name__ == '__main__':
     valid = False
     board = ''
     boa = ''
@@ -116,6 +128,10 @@ def solving():
             valid = True
         else:
             pass
+    if "-print" in sys.argv:
+        debug = True
+    else:
+        debug = False
     file_name = board.replace('  ', '')[:9]
     with open("test_cases/unsolved_board/unsolved_board_" + file_name + ".board", 'w') as f:
         f.write(board)
@@ -126,9 +142,4 @@ def solving():
     board = board.replace("  ", '')
     print("solved:")
     sudoku = list(map(lambda x: list(map(int, list(x))), board.split("\n")))
-    os.system("cls")
-    solver(sudoku, start=time.time())
-
-
-if __name__ == "__main__":
-    solving()
+    solver(sudoku, 1, time.time(), debug)
